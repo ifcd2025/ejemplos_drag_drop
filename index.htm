@@ -35,12 +35,8 @@
         <img src="burger_122704.png" alt="" draggable="true" id="d4" data-precio="8" data-stock="2">
         <img src="Pizza-icon_30282.png" alt="" draggable="true" id="d5" data-precio="11" data-stock="1">
     </div>
-    <div id="cesta">
-
-    </div>
+    <div id="cesta"></div>
     <div id="total">0</div>
-
-
 </main>
 <script>
     function comenzarArrastre(evt) {
@@ -49,7 +45,6 @@
             evt.dataTransfer.setData("text/plain", evt.target.id);
             evt.dataTransfer.setData("precio", evt.target.dataset.precio);
             evt.dataTransfer.setData("stock", evt.target.dataset.stock);
-
         }
     }
 
@@ -95,6 +90,5 @@
     document.getElementById("disponibles").addEventListener("drop", devuelto);
 
 </script>
-
 </body>
 </html>
