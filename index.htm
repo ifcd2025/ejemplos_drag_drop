@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Arrastrar y soltar</title>
+   <style>
+        #disponibles, #cesta {
+            min-width: 80px;
+            border: 1px solid black;
+            padding: 1rem;
+            margin: 1rem;
+            min-height: 120px;
+        }
+        #total {
+            font-size: 2rem;
+        }
+        img {
+            position: relative;
+        }
+        img::after {
+            content: attr(data-stock);
+           
+        }
+     
+
+   </style>
+</head>
+<body>
+<main>
+    <div id="disponibles">
+        <img src="32371bread_98903.png" alt="" draggable="true" id="d1" data-precio="10" data-stock="3">
+        <img src="32386sandwich_98891.png" alt="" draggable="true" id="d2" data-precio="20" data-stock="1">
+        <img src="32396popcorn_98852(1).png" alt="" draggable="true" id="d3" data-precio="15" data-stock="5">
+        <img src="burger_122704.png" alt="" draggable="true" id="d4" data-precio="8" data-stock="2">
+        <img src="Pizza-icon_30282.png" alt="" draggable="true" id="d5" data-precio="11" data-stock="1">
+    </div>
+    <div id="cesta">
+
+    </div>
+    <div id="total">0</div>
+
+
+</main>
+<script>
+    function comenzarArrastre(evt) {
+        if(evt.target.nodeName == "IMG" ){
+            // Con esto añadimos la información que deseamos enviar al arrastrar
+            evt.dataTransfer.setData("text/plain", evt.target.id);
+            evt.dataTransfer.setData("precio", evt.target.dataset.precio);
+            evt.dataTransfer.setData("stock", evt.target.dataset.stock);
+
+        }
+    }
+
+    function arrastrando(evt){
+        // Esto es necesario para permitir el arrastre
+        evt.preventDefault();
+    }
+
+    function soltado(evt) {
+        // Cuando se suelta el elemento sobre el destino
+        const id = evt.dataTransfer.getData("text/plain");
+        const stock = evt.dataTransfer.getData("stock");
+        const precio = evt.dataTransfer.getData("precio");
+        const total = document.getElementById("total");
+        total.textContent = parseInt(total.textContent) + parseInt(precio);
+        const cesta = document.getElementById("cesta");
+        const producto = document.getElementById(id);
+        if(stock > 0) {
+            const clon = producto.cloneNode(true);
+            producto.dataset.stock -= 1; 
+            clon.removeAttribute(id);
+            cesta.appendChild(clon);
+        }
+    }
+
+    function devuelto(evt) {
+        // Cuando se suelta el elemento sobre el destino
+        const id = evt.dataTransfer.getData("text/plain");
+        const precio = evt.dataTransfer.getData("precio");
+        const total = document.getElementById("total");
+        total.textContent = parseInt(total.textContent) - parseInt(precio);        
+        const disponibles = document.getElementById("disponibles");
+        const producto = document.getElementById(id);
+        disponibles.appendChild(producto);
+    }
+
+    document.getElementById("disponibles").addEventListener("dragstart", comenzarArrastre );
+    document.getElementById("cesta").addEventListener("dragstart", comenzarArrastre );
+
+    document.getElementById("cesta").addEventListener("dragover", arrastrando);
+    document.getElementById("cesta").addEventListener("drop", soltado);
+    document.getElementById("disponibles").addEventListener("dragover", arrastrando);
+    document.getElementById("disponibles").addEventListener("drop", devuelto);
+
+</script>
+
+</body>
+</html>
